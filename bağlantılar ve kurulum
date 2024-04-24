@@ -1,0 +1,7 @@
+L298N motor sürücü IN1=7 IN2=6 IN3=5 IN4=4 ENA=9 ENB=3
+led1=10
+led2=11
+Bluetooth modülü tx=rx rx=tx
+Kodu atarken bluetooth modülünden rx pinini çıkartıp atın aksi halde kod atılmayabilir.
+Bluetooth uygulaması için arduino rc car control adlı uygulama ile test edildi ama uygulama marketlerinde çoğu uygulama ile uyumludur 
+uygulamanın bluetooth kısmından bluetooth modülünü seçtiğinizde bağlanacaktır.
