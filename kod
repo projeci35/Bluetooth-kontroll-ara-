@@ -1,0 +1,141 @@
+#define MotorR1 7 // L298N üzerindeki IN1 pinine bağlayın
+#define MotorR2 6 //L298N üzerindeki IN2 pinine bağlayın
+#define MotorRenable 9  // L298N üzerindeki enA pinine bağlayın
+#define MotorL1 5 // L298N üzerindeki IN3 pinine bağlayın
+#define MotorL2 4 // L298N üzerindeki IN4 pinine bağlayın
+#define MotorLenable 3// L298N üzerindeki enB pinine bağlayın
+#define ledPin1 10 // İlk LED pinini tanımla
+#define ledPin2 11 // İkinci LED pinini tanımla
+
+char command; // Bluetooth modülünden alınan komutu tutacak değişken
+
+void setup() {
+  pinMode(MotorL1, OUTPUT);
+  pinMode(MotorL2, OUTPUT);
+  pinMode(MotorLenable, OUTPUT); 
+  pinMode(MotorR1, OUTPUT);
+  pinMode(MotorR2, OUTPUT);
+  pinMode(MotorRenable, OUTPUT);
+  pinMode(ledPin1, OUTPUT); // LED pinlerini çıkış olarak ayarla
+  pinMode(ledPin2, OUTPUT);
+
+  Serial.begin(9600); // Seri haberleşmeyi başlat
+
+}
+
+void loop() {
+  if(Serial.available() > 0){ // Bluetooth modülünden veri geldi mi kontrol et
+    command = Serial.read(); // Gelen veriyi oku
+    motor_control(); // Motorları kontrol et
+  }
+
+  // Motorlar çalışmadığında da LED'ler yanıp sönsün
+  if(command != 'F' && command != 'B' && command != 'R' && command != 'L' && command != 'S'){
+    blinkLEDs(); // LED'leri yanıp söndür
+  }
+}
+
+void motor_control(){
+  switch(command){
+    case 'F':
+      forward(); // İleri git
+      break;
+    case 'B':
+      backward(); // Geri git
+      break;
+    case 'R':
+      right(); // Sağa dön
+      break;
+    case 'L':
+      left(); // Sola dön
+      break;
+    case 'S':
+      stop(); // Dur
+      break;
+  }
+}
+
+void forward(){
+  digitalWrite(MotorR1, HIGH);
+  digitalWrite(MotorR2, LOW);
+  analogWrite(MotorRenable, 250);
+  
+  digitalWrite(MotorL1, HIGH);
+  digitalWrite(MotorL2, LOW);
+  analogWrite(MotorLenable, 250);
+}
+
+void backward(){
+  digitalWrite(MotorR1, LOW);
+  digitalWrite(MotorR2, HIGH);
+  analogWrite(MotorRenable, 250);
+  
+  digitalWrite(MotorL1, LOW);
+  digitalWrite(MotorL2, HIGH);
+  analogWrite(MotorLenable, 250);
+}
+
+void right(){
+  digitalWrite(MotorR1, HIGH);
+  digitalWrite(MotorR2, LOW);
+  analogWrite(MotorRenable, 0);
+  
+  digitalWrite(MotorL1, HIGH);
+  digitalWrite(MotorL2, LOW);
+  analogWrite(MotorLenable, 250);
+}
+
+void left(){
+  digitalWrite(MotorR1, HIGH);
+  digitalWrite(MotorR2, LOW);
+  analogWrite(MotorRenable, 250);
+  
+  digitalWrite(MotorL1, HIGH);
+  digitalWrite(MotorL2, LOW);
+  analogWrite(MotorLenable, 0);
+}
+
+void stop(){
+  digitalWrite(MotorR1, LOW);
+  digitalWrite(MotorR2, LOW);
+  analogWrite(MotorRenable, 0);
+  
+  digitalWrite(MotorL1, LOW);
+  digitalWrite(MotorL2, LOW);
+  analogWrite(MotorLenable, 0);
+}
+
+void blinkLEDs(){
+  delay(50);
+  digitalWrite(ledPin1, 1); // İlk LED'i yak
+  digitalWrite(ledPin2, 0); // İkinci LED'i yak
+  delay(50); // 100 ms bekle
+  digitalWrite(ledPin1, 0); // İlk LED'i söndür
+  digitalWrite(ledPin2, 0); // İkinci LED'i söndür
+  delay(50); // 100 ms bekle
+   digitalWrite(ledPin1, 1); // İlk LED'i yak
+  digitalWrite(ledPin2, 0); // İkinci LED'i yak
+  delay(50); // 100 ms bekle
+  digitalWrite(ledPin1, 0); // İlk LED'i söndür
+  digitalWrite(ledPin2, 1); // İkinci LED'i söndür
+  delay(50); // 100 ms bekle
+ digitalWrite(ledPin1, 0); // İlk LED'i yak
+  digitalWrite(ledPin2, 1); // İkinci LED'i yak
+  delay(50); // 100 ms bekle
+  digitalWrite(ledPin1, 0); // İlk LED'i söndür
+  digitalWrite(ledPin2, 0); // İkinci LED'i söndür
+  delay(50); // 100 ms bekle
+  digitalWrite(ledPin1, 0); // İlk LED'i söndür
+  digitalWrite(ledPin2, 1); // İkinci LED'i söndür
+  delay(50); // 100 ms bekle
+ digitalWrite(ledPin1, 0); // İlk LED'i söndür
+  digitalWrite(ledPin2, 0); // İkinci LED'i söndür
+ 
+
+
+
+
+
+
+  
+}
